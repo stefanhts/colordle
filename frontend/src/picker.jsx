@@ -172,9 +172,9 @@ const DailyColorGuessingGame = () => {
     2. Enter a valid hex code (e.g., #RRGGBB).
     3. You have 4 attempts to guess correctly.
     4. After each guess, you'll get feedback:
-       🟩 - Correct digit pair
-       🟨 - Close digit pair
-       ⬜ - Incorrect digit pair
+       🟩 - Correct digit
+       🟨 - Close digit
+       ⬜ - Incorrect digit
     5. A new color is available each day at midnight.
   `;
 
