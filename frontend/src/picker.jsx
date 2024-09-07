@@ -5,7 +5,6 @@ import { colors } from '../colors.js'
 
 const today = new Date().toISOString().split('T')[0];
 const COLOR = colors[today]
-console.log(COLOR)
 
 
 const getDistance = guess => {
@@ -14,7 +13,6 @@ const getDistance = guess => {
     guess.split('').forEach((guess, index) => {
         res.push(Math.abs(parseInt(guess, 16) - colorParts[index]))
     });
-    console.log("res", res)
     return res
 }
 
@@ -55,7 +53,7 @@ const DailyColorGuessingGame = () => {
         if (!loading) { // Check if loading is done
             saveGameState();
         }
-    }, [color, guesses, feedback, gameOver, shareableResult, nextGameTime, loading]);
+    }, [guesses, feedback, nextGameTime, loading, gameOver]);
 
     const saveGameState = () => {
         const stateToSave = {
@@ -72,10 +70,6 @@ const DailyColorGuessingGame = () => {
 
     const startNewGame = () => {
         setColor(COLOR);
-        setGuesses([]);
-        setFeedback([]);
-        setGameOver(false);
-        setShareableResult('');
         setNextGameTime(getNextGameTime());
     };
 
@@ -86,32 +80,50 @@ const DailyColorGuessingGame = () => {
         return tomorrow.getTime();
     };
 
+    useEffect(() => {
+        if (guesses.length > 0 && (gameOver || guess === color.slice(1))) {
+            const result = generateShareableResult(guesses, feedback);
+            setShareableResult(result);
+        }
+    }, [guesses, feedback, gameOver]);
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (guess.match(/^[0-9A-Fa-f]{6}$/)) {
-            const newFeedback = calculateFeedback(guess, color);
-            setMessage('')
+        if (guess.match(/^[A-Fa-f0-9]{6}$/)) {
+            const newFeedback = calculateFeedback(guess);
             setGuesses([...guesses, guess]);
             setFeedback([...feedback, newFeedback]);
-            setGuess('');
 
-            if (guess === color) {
+
+
+            if (guess === color.slice(1)) {
                 setMessage('Congratulations! You guessed the color!');
-                setGameOver(true);
-                setShareableResult(generateShareableResult([...guesses, guess], [...feedback, newFeedback]));
-            } else if (guesses.length === 4) {
+                setGameOver(true);  // set gameOver to true
+
+                // Generate the result immediately after setting gameOver
+                const result = generateShareableResult([...guesses, guess], [...feedback, newFeedback]);
+                setShareableResult(result);
+
+            } else if (guesses.length >= 3) {
                 setMessage(`Game over! The color was ${color}`);
                 setGameOver(true);
-                setShareableResult(generateShareableResult([...guesses, guess], [...feedback, newFeedback]));
+
+                // Generate the result for a failed game
+                const result = generateShareableResult([...guesses, guess], [...feedback, newFeedback]);
+                setShareableResult(result);
             }
+            setGuess('')
         } else {
-            setMessage('Please enter a valid hex color code (e.g., #RRGGBB)');
+            setMessage('Please enter a valid hex color code (e.g., RRGGBB)');
         }
     };
 
+
+
+
     const calculateFeedback = (guessColor) => {
         return getDistance(guessColor).map((dist) => {
-            console.log(dist)
             if (dist === 0) {
                 return 'green';
             }
@@ -134,13 +146,19 @@ const DailyColorGuessingGame = () => {
         const allGuesses = [...guesses, latestGuess];
         const allFeedback = [...feedback, latestFeedback];
 
-        let result = `Color Guessing Game ${allGuesses.length}/5\n\n`;
-        allFeedback.forEach((guess) => {
-            result += guess.map(color => emojiMap[color]).join('') + '\n';
-        });
-        result += `\nPlay at: https://colordle.stefanhts.dev`; // Replace with your actual game URL
+        let result = `Color Guessing Game ${allGuesses.length - 1}/4\n\n`;
 
-        setShareableResult(result);
+        // Check if allFeedback has valid values
+
+        allFeedback.forEach((guessFeedback) => {
+            result += guessFeedback.map(color => emojiMap[color]).join('') + '\n';
+        });
+
+        result += `\nPlay at: https://colordle.stefanhts.dev`; // Replace with actual game URL
+
+        // Debugging output to ensure result is valid
+
+        return result;
     };
 
     const copyToClipboard = () => {
@@ -152,7 +170,7 @@ const DailyColorGuessingGame = () => {
     const rules = `
     1. Guess the daily hidden color's hex code.
     2. Enter a valid hex code (e.g., #RRGGBB).
-    3. You have 5 attempts to guess correctly.
+    3. You have 4 attempts to guess correctly.
     4. After each guess, you'll get feedback:
        🟩 - Correct digit pair
        🟨 - Close digit pair
