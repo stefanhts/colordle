@@ -308,7 +308,15 @@ const DailyColorGuessingGame = () => {
                 <div style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {guesses.map((g, i) => (
                         <div key={i} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '0.5rem' }}>
-                            <div style={{ marginRight: '0.5rem', color: '#34495e', width: '80px', textAlign: 'right' }}>{g}</div>
+                            <span style={{
+                                display: 'inline-block',
+                                width: '1.5rem',
+                                height: '1.5rem',
+                                backgroundColor: `#${g}`,
+                                marginRight: '0.25rem',
+                                borderRadius: '0.25rem',
+                            }}></span>
+                            <div style={{ color: '#34495e', width: '5rem' }}>#{g}</div>
                             <div style={{ display: 'flex' }}>
                                 {feedback[i].map((f, j) => (
                                     <span key={j} style={{
