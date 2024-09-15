@@ -361,6 +361,7 @@ const DailyColorGuessingGame = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 marginBottom: "0.5rem",
+                gap: "0.5rem",
               }}
             >
               <span
@@ -369,11 +370,10 @@ const DailyColorGuessingGame = () => {
                   width: "1.5rem",
                   height: "1.5rem",
                   backgroundColor: `#${g}`,
-                  marginRight: "0.25rem",
                   borderRadius: "0.25rem",
                 }}
               ></span>
-              <div style={{ color: "#34495e", width: "5rem" }}>#{g}</div>
+              <div style={{ color: "#34495e", fontFamily: "Courier New, monospace", fontSize: "1.1em"}}>#{g}</div>
               <div style={{ display: "flex" }}>
                 {feedback[i].map((f, j) => (
                   <span
