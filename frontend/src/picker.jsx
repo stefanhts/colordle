@@ -373,7 +373,15 @@ const DailyColorGuessingGame = () => {
                   borderRadius: "0.25rem",
                 }}
               ></span>
-              <div style={{ color: "#34495e", fontFamily: "Courier New, monospace", fontSize: "1.1em"}}>#{g}</div>
+              <div
+                style={{
+                  color: "#34495e",
+                  fontFamily: "Courier New, monospace",
+                  fontSize: "1.1em",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase"
+                }}
+              >#{g}</div>
               <div style={{ display: "flex" }}>
                 {feedback[i].map((f, j) => (
                   <span
