@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { HelpCircle } from "lucide-react";
 import { colors } from "../colors.js";
+import './picker.css'
 
 const today = new Date().toISOString().split("T")[0];
 const COLOR = colors[today];
@@ -112,7 +113,7 @@ const DailyColorGuessingGame = () => {
         );
         setShareableResult(result);
       } else if (guesses.length >= AllowedGuesses - 1) {
-        setMessage(`Game over! The color was ${color}`);
+        setMessage(`Game over! The color was ` + color.toUpperCase());
         setGameOver(true);
 
         // Generate the result for a failed game
@@ -287,18 +288,11 @@ const DailyColorGuessingGame = () => {
             style={{ marginBottom: "2rem", textAlign: "center" }}
           >
             <input
+              className="guessInput"
               type="text"
               value={guess}
               onChange={(e) => setGuess(e.target.value)}
               placeholder="Enter hexcode (e.g., #RRGGBB)"
-              style={{
-                padding: "0.75rem 1rem",
-                border: "2px solid #bdc3c7",
-                borderRadius: "0.5rem",
-                marginRight: "0.5rem",
-                fontSize: "1rem",
-                width: "200px",
-              }}
             />
             <button
               type="submit"
@@ -361,6 +355,7 @@ const DailyColorGuessingGame = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 marginBottom: "0.5rem",
+                gap: "0.5rem",
               }}
             >
               <span
@@ -369,11 +364,18 @@ const DailyColorGuessingGame = () => {
                   width: "1.5rem",
                   height: "1.5rem",
                   backgroundColor: `#${g}`,
-                  marginRight: "0.25rem",
                   borderRadius: "0.25rem",
                 }}
               ></span>
-              <div style={{ color: "#34495e", width: "5rem" }}>#{g}</div>
+              <div
+                style={{
+                  color: "#34495e",
+                  fontFamily: "Courier New, monospace",
+                  fontSize: "1.1em",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase"
+                }}
+              >#{g}</div>
               <div style={{ display: "flex" }}>
                 {feedback[i].map((f, j) => (
                   <span
