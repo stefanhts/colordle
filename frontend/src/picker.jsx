@@ -102,7 +102,7 @@ const DailyColorGuessingGame = () => {
       setGuesses([...guesses, guess]);
       setFeedback([...feedback, newFeedback]);
 
-      if (guess === color.slice(1)) {
+      if (guess.toLowerCase() === color.slice(1)) {
         setMessage("Congratulations! You guessed the color!");
         setGameOver(true); // set gameOver to true
 
