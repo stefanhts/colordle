@@ -1,10 +1,25 @@
 import { useState, useEffect } from "react";
 import { HelpCircle } from "lucide-react";
-import { colors } from "../colors.js";
 import './picker.css'
 
+/// Adapted from https://stackoverflow.com/a/52171480
+const simpleHash = (str) => {
+  let hash = 9;
+  for (let i = 0; i < str.length; i++) {
+    hash = Math.imul(hash ^ str.charCodeAt(i), 0x17179149); // 9**9 (large odd number)
+  }
+  return hash;
+};
+
+const dateToColorHex = (date) => {
+  const hash = simpleHash(date); // Hash the date string.
+  const num = Math.abs(hash) % 0xffffff; // Ensure it's a positive number with the right range.
+  const hex = num.toString(16).padStart(6, '0'); // Convert to hex and pad with zeros.
+  return `#${hex}`;
+}
+
 const today = new Date().toISOString().split("T")[0];
-const COLOR = colors[today];
+const COLOR = dateToColorHex(today);
 const AllowedGuesses = 5;
 
 const getDistance = (guess) => {
